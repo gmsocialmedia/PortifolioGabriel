@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Gabriel Melo | Dev Web - Startup Edition</title>
+    <!-- Google Fonts & Font Awesome 6 -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #03070f;
+            color: #f0f3fa;
+            line-height: 1.45;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* FUNDO COM CÓDIGO DIGITANDO (cobertura total) */
+        .code-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+            font-family: 'Fira Code', 'Courier New', monospace;
+        }
+
+        .code-line {
+            position: absolute;
+            white-space: pre;
+            color: rgba(80, 220, 120, 0.5);
+            font-size: 0.95rem;
+            font-weight: 500;
+            text-shadow: 0 0 6px #00ff8844;
+            animation: codePulse 5s infinite ease-in-out;
+            pointer-events: none;
+            z-index: 1;
+            font-family: 'Fira Code', monospace;
+            will-change: transform, opacity;
+            background: transparent;
+        }
+
+        @keyframes codePulse {
+            0% { opacity: 0.25; text-shadow: 0 0 0px #00ff8844; }
+            50% { opacity: 0.65; text-shadow: 0 0 12px #6eff9e; }
+            100% { opacity: 0.25; text-shadow: 0 0 0px #00ff8844; }
+        }
+
+        .code-line.fade-out {
+            transition: opacity 0.8s ease;
+            opacity: 0 !important;
+        }
+
+        /* Conteúdo principal sobre fundo */
+        .content-wrapper {
+            position: relative;
+            z-index: 20;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem 2rem 3rem;
+        }
+
+        /* Glass card escuro e moderno */
+        .glass-card-dark {
+            background: rgba(8, 18, 32, 0.7);
+            backdrop-filter: blur(14px);
+            border-radius: 2rem;
+            border: 1px solid rgba(72, 120, 255, 0.3);
+            box-shadow: 0 25px 45px -18px rgba(0,0,0,0.6);
+            transition: transform 0.25s ease, box-shadow 0.3s;
+            padding: 2rem;
+            position: relative;
+        }
+
+        .glass-card-dark:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 32px 50px -20px rgba(0, 200, 255, 0.25);
+            border-color: rgba(100, 180, 250, 0.6);
+        }
+
+        /* Language Switcher - posicionado no canto superior direito */
+        .lang-switcher {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.8rem;
+            display: flex;
+            gap: 0.6rem;
+            z-index: 30;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(8px);
+            padding: 0.4rem 0.8rem;
+            border-radius: 60px;
+            border: 1px solid rgba(100, 160, 255, 0.5);
+        }
+        .lang-btn {
+            background: transparent;
+            border: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            color: #ccdeff;
+            padding: 0.3rem 0.7rem;
+            border-radius: 30px;
+            transition: all 0.2s;
+            font-family: 'Inter', sans-serif;
+        }
+        .lang-btn.active {
+            background: #3b82f6;
+            color: white;
+            box-shadow: 0 0 8px rgba(59, 130, 246, 0.5);
+        }
+        .lang-btn:hover:not(.active) {
+            background: rgba(59, 130, 246, 0.4);
+            color: white;
+        }
+
+        section {
+            margin-bottom: 3rem;
+            animation: fadeSlideUp 0.5s cubic-bezier(0.2, 0.9, 0.4, 1.1) forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        @keyframes fadeSlideUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        section:nth-child(1) { animation-delay: 0.05s; }
+        section:nth-child(2) { animation-delay: 0.1s; }
+        section:nth-child(3) { animation-delay: 0.15s; }
+        section:nth-child(4) { animation-delay: 0.2s; }
+        section:nth-child(5) { animation-delay: 0.25s; }
+        section:nth-child(6) { animation-delay: 0.3s; }
+        section:nth-child(7) { animation-delay: 0.35s; }
+
+        h1 {
+            font-size: 3.3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #FFFFFF, #A0C0FF, #6C9EFF);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -0.02em;
+        }
+
+        .badge-sub {
+            display: inline-block;
+            background: rgba(30, 60, 120, 0.6);
+            padding: 0.3rem 1.2rem;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #ccdeff;
+            border: 1px solid rgba(100, 160, 255, 0.7);
+            backdrop-filter: blur(4px);
+        }
+
+        .section-title {
+            font-size: 1.9rem;
+            font-weight: 700;
+            margin-bottom: 1.6rem;
+            position: relative;
+            display: inline-block;
+            color: #fff;
+        }
+        .section-title:after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 70%;
+            height: 3px;
+            background: linear-gradient(90deg, #3b82f6, #a5f0ff);
+            border-radius: 4px;
+        }
+
+        /* FOTO 3D COM MOLDURA (grande) */
+        .hero-flex {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        .avatar-3d {
+            flex-shrink: 0;
+            width: 180px;
+            height: 180px;
+            border-radius: 35% 65% 70% 30% / 40% 45% 55% 60%;
+            background: linear-gradient(145deg, #1e2a5e, #0f172a);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.4s cubic-bezier(0.2, 0.9, 0.5, 1.1);
+            box-shadow: 0 25px 35px -12px rgba(0,0,0,0.5), 0 0 0 4px rgba(59,130,246,0.4), 0 0 0 8px rgba(0,0,0,0.2);
+            transform: perspective(1000px) rotateY(2deg) rotateX(2deg);
+        }
+        .avatar-3d img {
+            width: 92%;
+            height: 92%;
+            object-fit: cover;
+            border-radius: 32% 68% 70% 30% / 40% 50% 50% 60%;
+            transition: transform 0.3s;
+        }
+        .avatar-3d:hover {
+            transform: perspective(1000px) rotateY(5deg) rotateX(3deg) scale(1.02);
+            box-shadow: 0 30px 45px -12px #000, 0 0 0 4px #3b82f6, 0 0 0 12px rgba(59,130,246,0.3);
+        }
+        .hero-text {
+            flex: 1;
+        }
+        .hero-desc {
+            font-size: 1.2rem;
+            color: #cbd5ff;
+            margin-top: 0.8rem;
+            font-weight: 400;
+        }
+
+        /* HABILIDADES COM ÍCONES */
+        .habilidades-icons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 0.8rem;
+        }
+        .skill-icon-item {
+            background: rgba(20, 35, 60, 0.7);
+            backdrop-filter: blur(6px);
+            border-radius: 3rem;
+            padding: 0.6rem 1.4rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            border: 1px solid rgba(80, 150, 255, 0.4);
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+        }
+        .skill-icon-item i {
+            font-size: 1.35rem;
+            width: 1.6rem;
+            color: #7aa9ff;
+            transition: 0.2s;
+        }
+        .skill-icon-item:hover {
+            transform: translateY(-5px);
+            background: #1e2f55;
+            border-color: #3b82f6;
+            box-shadow: 0 10px 20px -5px rgba(0,0,0,0.4);
+        }
+        .skill-icon-item:hover i {
+            color: white;
+            transform: scale(1.1);
+        }
+
+        /* FORMAÇÃO com LOGOS LIMPAS (sem círculo de fundo) */
+        .formacao-logos {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 1.5rem;
+            padding: 1rem 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .formacao-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        /* Logo wrapper sem fundo, sem círculo, sem borda — apenas a imagem limpa */
+        .logo-img-wrapper {
+            width: 42px;
+            height: 42px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+            border-radius: 0;
+            padding: 0;
+            transition: transform 0.2s;
+        }
+        .logo-img-wrapper img {
+            max-width: 100%;
+            max-height: 100%;
+            width: auto;
+            height: auto;
+            filter: drop-shadow(0 1px 2px rgba(0,0,0,0.2));
+            display: block;
+        }
+        .logo-img-wrapper:hover {
+            transform: scale(1.05);
+        }
+        .formacao-texto strong {
+            font-size: 1.1rem;
+            display: block;
+            color: white;
+        }
+        .formacao-texto span {
+            font-size: 0.85rem;
+            opacity: 0.8;
+        }
+
+        /* O QUE EU FAÇO - cards escuros */
+        .grid-2cols {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+            gap: 1.8rem;
+        }
+        .card-fazer-dark {
+            background: rgba(18, 28, 45, 0.7);
+            backdrop-filter: blur(8px);
+            border-radius: 1.5rem;
+            padding: 1.5rem;
+            transition: all 0.3s;
+            border: 1px solid rgba(70, 130, 200, 0.3);
+        }
+        .card-fazer-dark:hover {
+            transform: translateY(-8px);
+            background: rgba(30, 50, 80, 0.8);
+            border-color: #3b82f6;
+        }
+        .card-fazer-dark h3 {
+            font-size: 1.4rem;
+            margin-bottom: 0.7rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Projetos com zoom */
+        .projetos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        .project-card-dark {
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(6px);
+            border-radius: 1.5rem;
+            overflow: hidden;
+            transition: all 0.35s ease;
+            border: 1px solid #2a3b60;
+        }
+        .project-card-dark:hover {
+            transform: translateY(-10px);
+            border-color: #3b82f6;
+            box-shadow: 0 25px 30px -12px black;
+        }
+        .img-container {
+            overflow: hidden;
+        }
+        .project-img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            transition: transform 0.5s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            display: block;
+        }
+        .project-card-dark:hover .project-img {
+            transform: scale(1.08);
+        }
+        .project-info {
+            padding: 1.3rem 1.2rem 1.5rem;
+        }
+        .project-info h4 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: white;
+        }
+        .btn-projeto {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 1rem;
+            font-weight: 600;
+            color: #aac9ff;
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: 0.2s;
+        }
+        .btn-projeto i {
+            transition: transform 0.2s;
+        }
+        .btn-projeto:hover {
+            color: white;
+            gap: 12px;
+            border-bottom-color: #3b82f6;
+        }
+        .btn-projeto:hover i {
+            transform: translateX(6px);
+        }
+
+        /* Contato */
+        .contato-area-dark {
+            background: rgba(0, 10, 25, 0.7);
+            backdrop-filter: blur(12px);
+            border-radius: 1.8rem;
+            padding: 2rem;
+            text-align: center;
+            border: 1px solid rgba(59,130,246,0.4);
+        }
+        .contato-info {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        .contato-item {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            font-weight: 500;
+            background: rgba(20, 40, 70, 0.7);
+            padding: 0.6rem 1.4rem;
+            border-radius: 60px;
+            transition: all 0.2s;
+            color: #eef3ff;
+        }
+        .contato-item i {
+            font-size: 1.2rem;
+            color: #5d9eff;
+        }
+        .contato-item:hover {
+            background: #1f3a6b;
+            transform: translateY(-3px);
+            color: white;
+        }
+        hr {
+            margin: 1.5rem 0 0.5rem;
+            border-color: #2c405e;
+        }
+        footer {
+            text-align: center;
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+        .bullet-list-modern {
+            list-style: none;
+            padding-left: 0;
+        }
+        .bullet-list-modern li {
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .bullet-list-modern i {
+            width: 1.5rem;
+            color: #6b9eff;
+        }
+
+        @media (max-width: 780px) {
+            .content-wrapper {
+                padding: 1rem;
+            }
+            .glass-card-dark {
+                padding: 1.2rem;
+            }
+            h1 {
+                font-size: 2.2rem;
+            }
+            .hero-flex {
+                flex-direction: column;
+                text-align: center;
+            }
+            .avatar-3d {
+                width: 140px;
+                height: 140px;
+            }
+            .section-title:after {
+                width: 100%;
+            }
+            .logo-img-wrapper {
+                width: 32px;
+                height: 32px;
+            }
+            .lang-switcher {
+                top: 0.8rem;
+                right: 1rem;
+                padding: 0.2rem 0.5rem;
+                gap: 0.3rem;
+            }
+            .lang-btn {
+                font-size: 0.7rem;
+                padding: 0.2rem 0.5rem;
+            }
+        }
+
+        ::selection {
+            background: #3b82f6;
+            color: white;
+        }
+        a {
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="code-background" id="codeBackground"></div>
+
+<div class="content-wrapper">
+    <div class="glass-card-dark">
+        <!-- Seletor de idiomas -->
+        <div class="lang-switcher">
+            <button class="lang-btn" data-lang="pt">PT</button>
+            <button class="lang-btn" data-lang="en">EN</button>
+            <button class="lang-btn" data-lang="es">ES</button>
+        </div>
+
+        <!-- HERO COM FOTO 3D -->
+        <section>
+            <div class="hero-flex">
+                <div class="avatar-3d">
+                    <img src="images/foto.png" alt="Gabriel Melo">
+                </div>
+                <div class="hero-text">
+                    <h1>GABRIEL MELO</h1>
+                    <div class="badge-sub"><i class="fas fa-code"></i> <span data-i18n="badge">DESENVOLVEDOR WEB</span></div>
+                    <p class="hero-desc" data-i18n="heroDesc">Desenvolvo soluções web modernas, funcionais e responsivas que conectam marcas e pessoas.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SITES MODERNOS -->
+        <section>
+            <h2 class="section-title" data-i18n="titleSites">SITES MODERNOS E RESPONSIVOS</h2>
+            <ul class="bullet-list-modern">
+                <li><i class="fas fa-mobile-alt fa-fw"></i> <strong data-i18n="site1Tit">Sites modernos</strong> <span data-i18n="site1Desc">— Responsive e inovação.</span></li>
+                <li><i class="fas fa-tachometer-alt fa-fw"></i> <strong data-i18n="site2Tit">Performance e eficiência</strong> <span data-i18n="site2Desc">— Performance e eficiência.</span></li>
+                <li><i class="fas fa-palette fa-fw"></i> <strong data-i18n="site3Tit">Design intuitivo e funcional</strong> <span data-i18n="site3Desc">— Design intuitivo e funcional.</span></li>
+            </ul>
+        </section>
+
+        <!-- FORMAÇÃO (LOGOS LIMPAS, SEM CÍRCULO) + HABILIDADES -->
+        <div class="grid-2cols" style="margin-bottom: 2rem;">
+            <div>
+                <h2 class="section-title" data-i18n="titleFormacao">FORMAÇÃO</h2>
+                <div class="formacao-logos">
+                    <div class="formacao-item">
+                        <div class="logo-img-wrapper">
+                            <img src="images/senai.png" alt="Logo SENAI">
+                        </div>
+                        <div class="formacao-texto">
+                            <strong data-i18n="formSenaiTit">TÉCNICO EM INFORMÁTICA</strong>
+                            <span data-i18n="formSenaiSub">Formação Técnica SENAI</span>
+                        </div>
+                    </div>
+                    <div class="formacao-item">
+                        <div class="logo-img-wrapper">
+                            <img src="images/byu.png" alt="Logo BYU">
+                        </div>
+                        <div class="formacao-texto">
+                            <strong data-i18n="formByuTit">WEB DEVELOPMENT CERTIFICATE</strong>
+                            <span data-i18n="formByuSub">Brigham Young University</span>
+                        </div>
+                    </div>
+                    <div class="formacao-item">
+                        <i class="fas fa-bolt" style="font-size: 1.3rem; color:#5d9eff;"></i>
+                        <div class="formacao-texto">
+                            <strong data-i18n="formFoco">FOCO EM RESULTADOS · APAIXONADO POR TECNOLOGIA</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <h2 class="section-title" data-i18n="titleHabilidades">HABILIDADES</h2>
+                <div class="habilidades-icons">
+                    <div class="skill-icon-item"><i class="fab fa-html5"></i> HTML5</div>
+                    <div class="skill-icon-item"><i class="fab fa-css3-alt"></i> CSS3</div>
+                    <div class="skill-icon-item"><i class="fab fa-js"></i> JavaScript</div>
+                    <div class="skill-icon-item"><i class="fab fa-wordpress"></i> WordPress</div>
+                    <div class="skill-icon-item"><i class="fas fa-mobile-alt"></i> Responsive</div>
+                    <div class="skill-icon-item"><i class="fab fa-git-alt"></i> Git & GitHub</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- O QUE EU FAÇO -->
+        <section>
+            <h2 class="section-title" data-i18n="titleFaco">O QUE EU FAÇO</h2>
+            <div class="grid-2cols">
+                <div class="card-fazer-dark">
+                    <h3><i class="fas fa-laptop-code"></i> <span data-i18n="faco1Tit">DESENVOLVIMENTO WEB</span></h3>
+                    <p data-i18n="faco1Desc">Criação de sites modernos, responsivos e otimizados para qualquer dispositivo.</p>
+                </div>
+                <div class="card-fazer-dark">
+                    <h3><i class="fas fa-paintbrush"></i> <span data-i18n="faco2Tit">DESIGN MODERNO E LIMPO</span></h3>
+                    <p data-i18n="faco2Desc">Interfaces intuitivas que proporcionam a melhor experiência para o usuário.</p>
+                </div>
+                <div class="card-fazer-dark">
+                    <h3><i class="fas fa-rocket"></i> <span data-i18n="faco3Tit">PERFORMANCE E SEO</span></h3>
+                    <p data-i18n="faco3Desc">Sites rápidos, otimizados e preparados para navegar no Google.</p>
+                </div>
+                <div class="card-fazer-dark">
+                    <h3><i class="fas fa-cogs"></i> <span data-i18n="faco4Tit">SOLUÇÕES PERSONALIZADAS</span></h3>
+                    <p data-i18n="faco4Desc">Cada projeto é único e desenvolvido de acordo com a necessidade do cliente.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- PROJETOS RECENTES -->
+        <section>
+            <h2 class="section-title" data-i18n="titleProjetos">PROJETOS RECENTES</h2>
+            <div class="projetos-grid">
+                <div class="project-card-dark">
+                    <div class="img-container">
+                        <img class="project-img" src="images/salao.png" alt="Cisealux Galants">
+                    </div>
+                    <div class="project-info">
+                        <h4>Cisealux Galants</h4>
+                        <p data-i18n="proj1Desc">Site institucional para salão unisex com foco em agendamentos.</p>
+                        <a href="https://ciseauxgalants.netlify.app/" class="btn-projeto"><span data-i18n="verProjeto">Ver projeto</span><i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                <div class="project-card-dark">
+                    <div class="img-container">
+                        <img class="project-img" src="images/gm.png" alt="GM Social Media">
+                    </div>
+                    <div class="project-info">
+                        <h4>GM Social Media</h4>
+                        <p data-i18n="proj2Desc">Site institucional para agência de marketing digital.</p>
+                        <a href="https://gmsocialmedia.my.canva.site/" class="btn-projeto"><span data-i18n="verProjeto">Ver projeto</span><i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+                <div class="project-card-dark">
+                    <div class="img-container">
+                        <img class="project-img" src="images/pizza.png" alt="Pizza AI Cuore">
+                    </div>
+                    <div class="project-info">
+                        <h4>Pizza AI Cuore</h4>
+                        <p data-i18n="proj3Desc">Pizzaria artesanal com design premium e foco em conversões.</p>
+                        <a href="https://gmsocialmedia.github.io/PizzaAlCuore/" class="btn-projeto"><span data-i18n="verProjeto">Ver projeto</span><i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTATO -->
+        <section>
+            <div class="contato-area-dark">
+                <h2 style="font-size: 1.9rem; font-weight: 800;" data-i18n="contatoTit">VAMOS CONVERSAR?</h2>
+                <p style="margin: 0.5rem 0 1rem;" data-i18n="contatoSub">Estou sempre aberto a novos projetos e desafios. Entre em contato!</p>
+                <div class="contato-info">
+                    <div class="contato-item"><i class="fas fa-phone-alt"></i> (57) 99123-4567</div>
+                    <div class="contato-item"><i class="fas fa-envelope"></i> gabrielmelo.dev@gmail.com</div>
+                    <div class="contato-item"><i class="fas fa-map-marker-alt"></i> <span data-i18n="uruguai">Uruguai</span></div>
+                    <div class="contato-item"><i class="fas fa-globe"></i> gabrielmelo.dev</div>
+                </div>
+            </div>
+        </section>
+        <hr>
+        <footer>
+            <p data-i18n="footer">© 2026 Gabriel Melo — Desenvolvedor Web | Soluções que transformam ideias em realidade</p>
+        </footer>
+    </div>
+</div>
+
+<script>
+    // --- Dicionário de traduções ---
+    const translations = {
+        pt: {
+            badge: "DESENVOLVEDOR WEB",
+            heroDesc: "Desenvolvo soluções web modernas, funcionais e responsivas que conectam marcas e pessoas.",
+            titleSites: "SITES MODERNOS E RESPONSIVOS",
+            site1Tit: "Sites modernos",
+            site1Desc: "— Responsive e inovação.",
+            site2Tit: "Performance e eficiência",
+            site2Desc: "— Performance e eficiência.",
+            site3Tit: "Design intuitivo e funcional",
+            site3Desc: "— Design intuitivo e funcional.",
+            titleFormacao: "FORMAÇÃO",
+            formSenaiTit: "TÉCNICO EM INFORMÁTICA",
+            formSenaiSub: "Formação Técnica SENAI",
+            formByuTit: "WEB DEVELOPMENT CERTIFICATE",
+            formByuSub: "Brigham Young University",
+            formFoco: "FOCO EM RESULTADOS · APAIXONADO POR TECNOLOGIA",
+            titleHabilidades: "HABILIDADES",
+            titleFaco: "O QUE EU FAÇO",
+            faco1Tit: "DESENVOLVIMENTO WEB",
+            faco1Desc: "Criação de sites modernos, responsivos e otimizados para qualquer dispositivo.",
+            faco2Tit: "DESIGN MODERNO E LIMPO",
+            faco2Desc: "Interfaces intuitivas que proporcionam a melhor experiência para o usuário.",
+            faco3Tit: "PERFORMANCE E SEO",
+            faco3Desc: "Sites rápidos, otimizados e preparados para navegar no Google.",
+            faco4Tit: "SOLUÇÕES PERSONALIZADAS",
+            faco4Desc: "Cada projeto é único e desenvolvido de acordo com a necessidade do cliente.",
+            titleProjetos: "PROJETOS RECENTES",
+            proj1Desc: "Site institucional para salão unisex com foco em agendamentos.",
+            proj2Desc: "Site institucional para agência de marketing digital.",
+            proj3Desc: "Pizzaria artesanal com design premium e foco em conversões.",
+            verProjeto: "Ver projeto",
+            contatoTit: "VAMOS CONVERSAR?",
+            contatoSub: "Estou sempre aberto a novos projetos e desafios. Entre em contato!",
+            uruguai: "Uruguai",
+            footer: "© 2025 Gabriel Melo — Desenvolvedor Web | Soluções que transformam ideias em realidade"
+        },
+        en: {
+            badge: "WEB DEVELOPER",
+            heroDesc: "I develop modern, functional and responsive web solutions that connect brands and people.",
+            titleSites: "MODERN & RESPONSIVE WEBSITES",
+            site1Tit: "Modern websites",
+            site1Desc: "— Responsive and innovative.",
+            site2Tit: "Performance & efficiency",
+            site2Desc: "— Performance and efficiency.",
+            site3Tit: "Intuitive & functional design",
+            site3Desc: "— Intuitive and functional design.",
+            titleFormacao: "EDUCATION",
+            formSenaiTit: "INFORMATION TECHNOLOGY TECHNICIAN",
+            formSenaiSub: "SENAI Technical Education",
+            formByuTit: "WEB DEVELOPMENT CERTIFICATE",
+            formByuSub: "Brigham Young University",
+            formFoco: "FOCUSED ON RESULTS · PASSIONATE ABOUT TECHNOLOGY",
+            titleHabilidades: "SKILLS",
+            titleFaco: "WHAT I DO",
+            faco1Tit: "WEB DEVELOPMENT",
+            faco1Desc: "Creation of modern, responsive and optimized websites for any device.",
+            faco2Tit: "MODERN & CLEAN DESIGN",
+            faco2Desc: "Intuitive interfaces that provide the best user experience.",
+            faco3Tit: "PERFORMANCE & SEO",
+            faco3Desc: "Fast, optimized websites ready to rank on Google.",
+            faco4Tit: "CUSTOM SOLUTIONS",
+            faco4Desc: "Each project is unique and developed according to the client's needs.",
+            titleProjetos: "RECENT PROJECTS",
+            proj1Desc: "Corporate website for a unisex salon focused on appointments.",
+            proj2Desc: "Corporate website for a digital marketing agency.",
+            proj3Desc: "Artisanal pizzeria with premium design and focus on conversions.",
+            verProjeto: "View project",
+            contatoTit: "LET'S TALK?",
+            contatoSub: "I'm always open to new projects and challenges. Get in touch!",
+            uruguai: "Uruguay",
+            footer: "© 2025 Gabriel Melo — Web Developer | Turning ideas into reality"
+        },
+        es: {
+            badge: "DESARROLLADOR WEB",
+            heroDesc: "Desarrollo soluciones web modernas, funcionales y responsivas que conectan marcas y personas.",
+            titleSites: "SITIOS MODERNOS Y RESPONSIVOS",
+            site1Tit: "Sitios modernos",
+            site1Desc: "— Responsive e innovación.",
+            site2Tit: "Rendimiento y eficiencia",
+            site2Desc: "— Rendimiento y eficiencia.",
+            site3Tit: "Diseño intuitivo y funcional",
+            site3Desc: "— Diseño intuitivo y funcional.",
+            titleFormacao: "FORMACIÓN",
+            formSenaiTit: "TÉCNICO EN INFORMÁTICA",
+            formSenaiSub: "Formación Técnica SENAI",
+            formByuTit: "CERTIFICADO DE DESARROLLO WEB",
+            formByuSub: "Brigham Young University",
+            formFoco: "ENFOQUE EN RESULTADOS · APASIONADO POR LA TECNOLOGÍA",
+            titleHabilidades: "HABILIDADES",
+            titleFaco: "LO QUE HAGO",
+            faco1Tit: "DESARROLLO WEB",
+            faco1Desc: "Creación de sitios web modernos, responsivos y optimizados para cualquier dispositivo.",
+            faco2Tit: "DISEÑO MODERNO Y LIMPIO",
+            faco2Desc: "Interfaces intuitivas que brindan la mejor experiencia al usuario.",
+            faco3Tit: "RENDIMIENTO Y SEO",
+            faco3Desc: "Sitios rápidos, optimizados y preparados para posicionar en Google.",
+            faco4Tit: "SOLUCIONES PERSONALIZADAS",
+            faco4Desc: "Cada proyecto es único y se desarrolla según la necesidad del cliente.",
+            titleProjetos: "PROYECTOS RECIENTES",
+            proj1Desc: "Sitio institucional para salón unisex enfocado en reservas.",
+            proj2Desc: "Sitio institucional para agencia de marketing digital.",
+            proj3Desc: "Pizzería artesanal con diseño premium y enfoque en conversiones.",
+            verProjeto: "Ver proyecto",
+            contatoTit: "¿HABLAMOS?",
+            contatoSub: "Siempre estoy abierto a nuevos proyectos y desafíos. ¡Contáctame!",
+            uruguai: "Uruguay",
+            footer: "© 2025 Gabriel Melo — Desarrollador Web | Soluciones que transforman ideas en realidad"
+        }
+    };
+
+    // Função para aplicar o idioma selecionado
+    function setLanguage(lang) {
+        const t = translations[lang];
+        if (!t) return;
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.getAttribute('data-i18n');
+            if (t[key]) {
+                if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+                    el.value = t[key];
+                } else {
+                    el.innerHTML = t[key];
+                }
+            }
+        });
+        // Atualizar classe ativa nos botões
+        document.querySelectorAll('.lang-btn').forEach(btn => {
+            if (btn.getAttribute('data-lang') === lang) {
+                btn.classList.add('active');
+            } else {
+                btn.classList.remove('active');
+            }
+        });
+        localStorage.setItem('preferredLang', lang);
+    }
+
+    // Event listeners para os botões
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const lang = btn.getAttribute('data-lang');
+            setLanguage(lang);
+        });
+    });
+
+    // Carregar idioma salvo ou padrão (português)
+    const savedLang = localStorage.getItem('preferredLang') || 'pt';
+    setLanguage(savedLang);
+
+    // --- Script do fundo de código (mesmo do original, sem alterações) ---
+    (function() {
+        const bgContainer = document.getElementById('codeBackground');
+        if (!bgContainer) return;
+
+        const codeSnippets = [
+            "const dev = 'Gabriel Melo';", "function buildApp() { return 🚀 }", "npm run deploy --prod",
+            "<div className='glass-card-dark'>", "useState<Project[]>([]);", "git commit -m 'feat: portfolio'",
+            "background: #0B1120; backdrop-filter: blur(4px);", "console.log('🔥 startup mode')",
+            "export default function App() {", "padding: 2rem; border-radius: 2rem;",
+            "ReactDOM.render(<App />, root);", "const [isAnimating, setAnimating] = useState(true);",
+            "@keyframes typing { from { width: 0 } }", "interface Developer { skills: string[] }",
+            "fetch('/api/projects').then(res => res.json());", "<!-- UI/UX design system -->",
+            "transform: scale(1.05); transition: 0.3s;", "tailwind.config.js theme extend",
+            "new PortfolioEngine();", "// ✨ startup with impact", "cursor: pointer; user-select: none;",
+            "<section><h2>Projetos</h2></section>", "backdrop-filter: blur(12px);", "border-image: gradient;"
+        ];
+
+        let activeLinesCount = 0;
+        const MAX_LINES = 24;
+
+        function random(min, max) {
+            return min + Math.random() * (max - min);
+        }
+
+        function createTypingLine() {
+            if (activeLinesCount >= MAX_LINES) return;
+            activeLinesCount++;
+
+            const snippet = codeSnippets[Math.floor(Math.random() * codeSnippets.length)];
+            const lineDiv = document.createElement('div');
+            lineDiv.className = 'code-line';
+
+            const leftPos = random(1, 97);
+            const topPos = random(0.5, 96);
+            const fontSize = random(0.7, 1.3);
+            lineDiv.style.left = leftPos + '%';
+            lineDiv.style.top = topPos + '%';
+            lineDiv.style.fontSize = fontSize + 'rem';
+            lineDiv.style.position = 'absolute';
+            lineDiv.style.opacity = '0';
+            lineDiv.style.whiteSpace = 'pre';
+            lineDiv.style.fontFamily = "'Fira Code', 'Courier New', monospace";
+            lineDiv.style.fontWeight = '500';
+            lineDiv.style.background = 'transparent';
+
+            lineDiv.textContent = '';
+            bgContainer.appendChild(lineDiv);
+
+            let currentText = '';
+            let index = 0;
+            const typingSpeed = random(25, 65);
+
+            function typeNextChar() {
+                if (index < snippet.length) {
+                    currentText += snippet[index];
+                    lineDiv.textContent = currentText;
+                    index++;
+                    setTimeout(typeNextChar, typingSpeed);
+                } else {
+                    setTimeout(() => {
+                        lineDiv.classList.add('fade-out');
+                        setTimeout(() => {
+                            if (lineDiv.parentNode) lineDiv.remove();
+                            activeLinesCount--;
+                        }, 800);
+                    }, 2800 + Math.random() * 2000);
+                }
+            }
+
+            lineDiv.style.transition = 'opacity 0.4s';
+            lineDiv.style.opacity = '0.8';
+            setTimeout(() => {
+                typeNextChar();
+            }, 50);
+        }
+
+        function startCodeRain() {
+            for (let i = 0; i < 8; i++) {
+                setTimeout(() => createTypingLine(), i * 400);
+            }
+            setInterval(() => {
+                if (activeLinesCount < MAX_LINES) createTypingLine();
+            }, 2000);
+        }
+
+        startCodeRain();
+    })();
+</script>
+</body>
+</html>
